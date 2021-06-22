@@ -1,21 +1,48 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
+import ForgotPassword from '../pages/ForgotPassword';
 
-const Tab = createBottomTabNavigator();
+const NoPrivate = createStackNavigator();
 
 export default function RoutesNoPrivate() {
     return (
-        <Tab.Navigator>
-            <Tab.Screen
-                options={{ tabBarVisible: false }}
-                name="SignIn" component={SignIn}
-            ></Tab.Screen>
-            <Tab.Screen
-                options={{ tabBarVisible: false }}
-                name="SignUp" component={SignUp}
-            ></Tab.Screen>
-        </Tab.Navigator>
+
+        <NoPrivate.Navigator
+            screenOptions={{
+                headerShown: true,
+            }}>
+
+            <NoPrivate.Screen options={{
+                headerTitle: "",
+                headerTitleAlign: 'center',
+                headerTitleStyle: { color: '#FFF', fontFamily: 'Roboto-Bold' },
+                headerBackTitleVisible: false,
+                headerTintColor: '#FFF',
+                headerStyle: { backgroundColor: '#DDB0D5', },
+            }} name="SignIn" component={SignIn} />
+
+            <NoPrivate.Screen options={{
+                headerTitle: "",
+                headerTitleAlign: 'center',
+                headerTitleStyle: { color: '#FFF', fontFamily: 'Roboto-Bold' },
+                headerBackTitleVisible: false,
+                headerTintColor: '#FFF',
+                headerStyle: { backgroundColor: '#DDB0D5', },
+            }} name="SignUp" component={SignUp} />
+
+            <NoPrivate.Screen options={{
+                headerTitle: "Esqueci minha senha",
+                headerTitleAlign: 'center',
+                headerTitleStyle: { color: '#FFF', fontFamily: 'Roboto-Bold' },
+                headerBackTitleVisible: false,
+                headerTintColor: '#FFF',
+                headerStyle: { backgroundColor: '#DDB0D5', },
+            }} name="ForgotPassword" component={ForgotPassword} />
+
+        </NoPrivate.Navigator>
+
+
     )
 }

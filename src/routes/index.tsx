@@ -5,7 +5,7 @@ import RoutesNoPrivate from './routes.no.private';
 
 
 export default function Routes() { 
-    const isLogado: boolean = false;
+    const isLogado: boolean = true;
  
     return isLogado ? <RoutesPrivate /> : <RoutesNoPrivate />
  

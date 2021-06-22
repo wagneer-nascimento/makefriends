@@ -1,17 +1,18 @@
 import styled from 'styled-components/native';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import { Platform } from 'react-native';
 
-export const SafeAreaView = styled.SafeAreaView`
+export const KeyboardAvoidingView = styled.KeyboardAvoidingView`
     flex: 1;
-    background: #DDB0D5;    
-    justify-content: center;
+    background: #DDB0D5;     
+    
 `;
 export const ContainerLogo = styled.View`
     align-items: center;
     justify-content: center;
     flex-direction: row;
     margin-bottom: 30px;
-`; 
+`;
 
 export const TextLogo = styled.Text`
     font-size: 23px;
@@ -25,10 +26,11 @@ export const TextInstruction = styled.Text`
     margin-bottom: 40px;
 `;
 
-export const Container = styled.View` 
+export const Container = styled.View`  
+    margin-top: ${Platform.OS == 'android' ? 20 : 40}px;
     padding: 0 20px;
 `;
- 
+
 export const Text = styled.Text`
     color: #FFF;
     font-family: 'Roboto-Bold';

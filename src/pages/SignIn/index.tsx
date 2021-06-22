@@ -1,67 +1,102 @@
+import React, { useState } from 'react';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
 import {
     Container,
     ContainerForgotPassword,
     ContainerRegister,
-    SafeAreaView,
+    KeyboardAvoidingView,
     Text,
     ContainerLogo,
     TextLogo,
     Icon,
     TextInstruction,
 } from './styles';
-import { Dimensions, Platform, ScrollView } from 'react-native';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
-import Routes from '../../routes';
+import { Alert, Platform, ScrollView, } from 'react-native';
+import { useAuth } from '../../auth/auth';
 import { useEffect } from 'react';
 
 export default function SignIn() {
+    const { signIn, loading } = useAuth();
+  
     const navigation = useNavigation();
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [loadingButton, setLoadingButton] = useState<boolean>(false);
 
-    useEffect(() => {
-        if (Platform.OS == 'ios') { 
+    async function handleSignin() {
 
-            console.log('height: ', Dimensions.get('screen').height)
-            console.log('width: ', Dimensions.get('screen').width)
+        //let isValido = validateFormAuth(usuario, senha);
 
-        }
-    }, [])
+        // if (isValido) { 
+        await signIn({
+            email,
+            password,
+        }).catch((error) => {
+            //Alert.alert('Atenção', error.response.data.data);
 
-    function login() {
-
+        });
     }
+
     return (
-        <SafeAreaView>
-            <Container>
-                <ContainerLogo>
-                    <TextLogo>
-                        Make Friends <Icon name="wechat" />
-                    </TextLogo>
-                </ContainerLogo>
-                <TextInstruction>
-                    Bem vindo ao App,{"\n"}
-                    Faça o seu login para continuar.
-                </TextInstruction>
-                <Input
-                    placeholder="E-mail"
-                    name="email" />
-                <Input
-                    placeholder="Senha"
-                    name="password" />
-                <Button
-                    onPress={() => { login() }}
-                >Entrar</Button>
 
-                <ContainerForgotPassword>
-                    <Text>Esqueci a senha.</Text>
-                </ContainerForgotPassword>
-                <ContainerRegister onPress={() => { navigation.navigate('SignUp') }}>
-                    <Text>Não tem conta? Registre-se.</Text>
-                </ContainerRegister>
-            </Container>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            enabled
+        >
+            <ScrollView keyboardShouldPersistTaps="handled">
 
-        </SafeAreaView>
+                <Container>
+                    <ContainerLogo>
+                        <TextLogo>
+                            Make Friends <Icon name="wechat" />
+                        </TextLogo>
+                    </ContainerLogo>
+                    <TextInstruction>
+                        Bem vindo ao App,{"\n"}
+                        Faça o seu login para continuar.
+                    </TextInstruction>
+
+                    <Input
+                        maxLength={40}
+                        autoCorrect={false}
+                        autoCapitalize="none"
+                        keyboardType="email-address"
+                        name="email"
+                        placeholder="E-mail"
+                        onChangeText={setEmail}
+                        value={email}
+                        returnKeyType="next"
+                        onSubmitEditing={() => {
+                            // senhaRef.current?.focus();
+                        }} />
+
+                    <Input
+                        maxLength={30}
+                        secureTextEntry
+                        name="senha"
+                        placeholder="Senha"
+                        onChangeText={setPassword}
+                        value={password}
+                        returnKeyType="send"
+                        textContentType="newPassword"
+                        onSubmitEditing={() => { handleSignin() }}
+                    />
+
+                    <Button
+                        loading={loading}
+                        onPress={() => { handleSignin() }}
+                    >Entrar</Button>
+
+                    <ContainerForgotPassword onPress={() => { navigation.navigate('ForgotPassword') }}>
+                        <Text>Esqueci a senha.</Text>
+                    </ContainerForgotPassword>
+                    <ContainerRegister onPress={() => { navigation.navigate('SignUp') }}>
+                        <Text>Não tem conta? Registre-se.</Text>
+                    </ContainerRegister>
+                </Container>
+            </ScrollView>
+        </KeyboardAvoidingView>
     )
 }

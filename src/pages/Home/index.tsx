@@ -13,6 +13,8 @@ import {
 
 import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
 import Footer from '../../components/FooterTab';
+import api from '../../services/api';
+import { useAuth } from '../../auth/auth';
 
 interface Pessoas {
     nome: string;
@@ -23,10 +25,11 @@ interface Pessoas {
 }
 
 export default function Home() {
+    const { user } = useAuth();
     const [latitude, setLatitude] = useState<number>(-8.124919429076751);
     const [longitude, setLongitude] = useState<number>(-34.939161429807925);
     const [pessoas, setPessoas] = useState<Pessoas[]>([]);
-
+ 
     useEffect(() => {
         const data = [
             {
@@ -55,6 +58,17 @@ export default function Home() {
         setPessoas(data)
     }, [])
 
+    async function fetchPessoas() {
+
+        try {
+            const response = await api.get('users');
+            setPessoas(response.data);
+        } catch (error) {
+
+        }
+
+    }
+
     return (
         <Container>
             <MapView
@@ -72,7 +86,7 @@ export default function Home() {
                 showsBuildings={false}
                 loadingEnabled
             >
-                
+
                 {pessoas.map((item) => (
                     <Marker
                         key={item.lat}
@@ -94,7 +108,7 @@ export default function Home() {
                     </Marker>
                 ))}
             </MapView>
-          
+
             <Footer home={true} perfil={false} message={false} />
 
         </Container>
